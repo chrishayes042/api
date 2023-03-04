@@ -1,7 +1,6 @@
 package repo
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -15,7 +14,6 @@ import (
 
 func getEnvVariable(key string) string {
 	err := godotenv.Load("postgres.env")
-
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
@@ -28,20 +26,22 @@ var user string = getEnvVariable("user")
 var pass string = getEnvVariable("pass")
 var dbname string = getEnvVariable("db")
 
-func connectToDb() *sql.DB {
+func connectToDb() string { //*sql.DB
 	psqlInfo := fmt.Sprintf("host=%s, port=%s, user=%s, pass=%s, dbname=%s", host, port, user, pass, dbname)
 
-	db, err := sql.Open("postgres", psqlInfo)
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("Connected")
-	return db
+	// db, err := sql.Open("postgres", psqlInfo)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// defer db.Close()
+	// err = db.Ping()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// fmt.Println("Connected")
+	// return db
+	return psqlInfo
+
 }
 
 // get all Articles. Should be a db call
@@ -57,5 +57,6 @@ func AllArticles(w http.ResponseWriter, r *http.Request) {
 
 // function to test the homepage
 func HomePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "homepage endpoint hit")
+	str := connectToDb()
+	fmt.Fprint(w, str)
 }
