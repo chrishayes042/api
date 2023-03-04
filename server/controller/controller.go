@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/chrishayes042/repo"
+	"github.com/chrishayes042/api/repo"
 	"log"
 	"net/http"
 )

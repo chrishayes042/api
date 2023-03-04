@@ -1,4 +1,4 @@
-module github.com/chrishayes042
+module github.com/chrishayes042/api
 
 go 1.20
 

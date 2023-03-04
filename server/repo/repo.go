@@ -10,7 +10,7 @@ import (
 
 	"github.com/joho/godotenv"
 
-	"github.com/chrishayes042/model"
+	"github.com/chrishayes042/api/model"
 )
 
 func getEnvVariable(key string) string {

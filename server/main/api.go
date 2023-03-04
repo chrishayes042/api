@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/chrishayes042/controller"
+	"github.com/chrishayes042/api/controller"
 )
 
 // main func
