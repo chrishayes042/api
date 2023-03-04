@@ -8,4 +8,5 @@ type Article struct {
 }
 
 // create a list of the struct
+
 type Articles []Article
