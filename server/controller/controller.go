@@ -1,10 +1,9 @@
 package controller
 
 import (
+	"github.com/chrishayes042/repo"
 	"log"
 	"net/http"
-
-	"github.com/chrishayes042/repo"
 )
 
 // mappings to the routes
