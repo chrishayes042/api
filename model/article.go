@@ -8,5 +8,4 @@ type Article struct {
 }
 
 // create a list of the struct
-// test commit
 type Articles []Article
