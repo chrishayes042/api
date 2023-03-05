@@ -1,7 +1,6 @@
 package repo
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -9,6 +8,7 @@ import (
 	"os"
 
 	"github.com/chrishayes042/api/model"
+	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
@@ -21,15 +21,10 @@ func getEnvVariable(key string) string {
 	return os.Getenv(key)
 }
 
-var database *sql.DB = connectToDb()
+var database *sqlx.DB = connectToDb()
 
-// var host = getEnvVariable("host")
-// var port = getEnvVariable("port")
-// var user = getEnvVariable("user")
-// var pass = getEnvVariable("pass")
-// var dbname = getEnvVariable("db")
-
-func connectToDb() *sql.DB { //
+// using sqlx to connect to the database
+func connectToDb() *sqlx.DB { //
 	var (
 		host     = getEnvVariable("HOST")
 		user     = getEnvVariable("USER")
@@ -41,7 +36,7 @@ func connectToDb() *sql.DB { //
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
 		"password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 
-	db, err := sql.Open("postgres", psqlInfo)
+	db, err := sqlx.Connect("postgres", psqlInfo)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -49,35 +44,23 @@ func connectToDb() *sql.DB { //
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Connected")
+	fmt.Printf("Connected to DB %s\n", dbname)
 	// return database connection
 	return db
 
 }
-func QueryDB(db *sql.DB, query string) *sql.Rows {
-	fmt.Println("about to query data")
-	rows, err := db.Query(query)
-	fmt.Println(err)
-	if err != nil {
-		log.Fatal(err)
-	}
 
-	return rows
-
-}
-
+// function to retrieve all users from the users table
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Getting all users")
-	rows := QueryDB(database, "select * from users")
-	// defer rows.Close()
-	fmt.Println(rows)
+	userArray := model.User{}
+	rows, _ := database.Queryx("select * from users")
+
 	for rows.Next() {
-		user := &model.User{}
-		err := rows.Scan(&user)
-		userArray := &model.Users{}
+		err := rows.StructScan(&userArray)
 		if err != nil {
 			log.Fatal(err)
 		}
+		fmt.Println(userArray)
 		json.NewEncoder(w).Encode(userArray)
 	}
 }
