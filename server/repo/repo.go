@@ -5,50 +5,15 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/chrishayes042/api/model"
 	"github.com/jmoiron/sqlx"
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
-func getEnvVariable(key string) string {
-	err := godotenv.Load("postgres.env")
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-	return os.Getenv(key)
-}
-
-var database *sqlx.DB = connectToDb()
+var database *sqlx.DB = ConnectToDb()
 
 // using sqlx to connect to the database
-func connectToDb() *sqlx.DB { //
-	var (
-		host     = getEnvVariable("HOST")
-		user     = getEnvVariable("USER")
-		password = getEnvVariable("PASS")
-		dbname   = getEnvVariable("DBNAME")
-		port     = getEnvVariable("PORT")
-	)
-
-	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s "+
-		"password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-
-	db, err := sqlx.Connect("postgres", psqlInfo)
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = db.Ping()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("Connected to DB %s\n", dbname)
-	// return database connection
-	return db
-
-}
 
 // function to retrieve all users from the users table
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {

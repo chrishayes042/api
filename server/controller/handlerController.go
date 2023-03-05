@@ -1,5 +1,8 @@
 package controller
 
+/*
+*Controller for the routes
+ */
 import (
 	"log"
 	"net/http"
