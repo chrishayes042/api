@@ -1,4 +1,4 @@
-package repo
+package controller
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/chrishayes042/api/model"
+	"github.com/chrishayes042/api/pkg/model"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
